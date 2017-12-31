@@ -3,22 +3,8 @@ module kinematics.quaternion;
 import std.algorithm : clamp;
 import std.math : asin, atan2, cos, sin;
 
-struct Vector3(T)
-    if (__traits(isArithmetic, T))
-{
-    T x;
-    T y;
-    T z;
-}
+import kinematics.core : Vector3, Vector4;
 
-struct Vector4(T)
-    if (__traits(isArithmetic, T))
-{
-    T x;
-    T y;
-    T z;
-    T w;
-}
 
 struct Quaternion(T)
     if (__traits(isArithmetic, T))
