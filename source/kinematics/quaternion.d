@@ -3,7 +3,8 @@ module kinematics.quaternion;
 import std.algorithm : clamp;
 import std.math : asin, atan2, cos, sin;
 
-import kinematics.core : Vector3, Vector4;
+import kinematics.core : Vector4;
+import kinematics.euler : Euler;
 
 
 struct Quaternion(T)
@@ -28,9 +29,9 @@ struct Quaternion(T)
     }
 
     // Ditto.
-    this(Vector3!T rpy) nothrow @nogc
+    this(Euler!T rpy) nothrow @nogc
     {
-        this(rpy.x, rpy.y, rpy.z);
+        this(rpy.roll, rpy.pitch, rpy.yaw);
     }
 
     T x() @property nothrow @nogc
@@ -54,7 +55,7 @@ struct Quaternion(T)
     }
 
     // Create rpy angles.
-    Vector3!T toEulerAngles() nothrow @nogc
+    Euler!T toEulerAngles() nothrow @nogc
     {
         auto ysqr = y * y;
 
@@ -72,7 +73,7 @@ struct Quaternion(T)
         auto t4 = 1.0 - 2.0 * (ysqr + z * z);
         auto yaw = atan2(t3, t4);
 
-        return Vector3!T(roll, pitch, yaw);
+        return Euler!T(roll, pitch, yaw);
     }
 }
 
@@ -83,7 +84,7 @@ unittest
     auto q = Quaternion!double(0.1, 0.2, 0.3);
     auto rpy = q.toEulerAngles();
 
-    assert(approxEqual(rpy.x, 0.1));
-    assert(approxEqual(rpy.y, 0.2));
-    assert(approxEqual(rpy.z, 0.3));
+    assert(approxEqual(rpy.roll, 0.1));
+    assert(approxEqual(rpy.pitch, 0.2));
+    assert(approxEqual(rpy.yaw, 0.3));
 }
