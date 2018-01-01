@@ -2,6 +2,7 @@ module kinematics.euler;
 
 import kinematics.core : Vector3;
 
+// Set of euler angles.
 struct Euler(T)
 {
     Vector3!T coords;
