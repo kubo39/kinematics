@@ -106,5 +106,8 @@ unittest
         float4 f = [0.1, 0.2, 0.3, 0.4];
         auto q = Quaternion!float(f);
         assert(approxEqual(q.x, f[0]));
+        assert(approxEqual(q.y, f[1]));
+        assert(approxEqual(q.z, f[2]));
+        assert(approxEqual(q.w, f[3]));
     }
 }
