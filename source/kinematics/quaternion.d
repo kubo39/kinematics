@@ -34,6 +34,16 @@ struct Quaternion(T)
         this(rpy.roll, rpy.pitch, rpy.yaw);
     }
 
+    static if (is(T == float))
+    {
+        import core.simd;
+        // from float4(simd).
+        this(float4 f)
+        {
+            auto v = cast(float4)__simd_sto(XMM.STOUPS, *cast(void16*)&this, f);
+        }
+    }
+
     T x() @property nothrow @nogc
     {
         return this.coords.x;
@@ -81,10 +91,20 @@ unittest
 {
     import std.math : abs, approxEqual;
 
-    auto q = Quaternion!double(0.1, 0.2, 0.3);
-    auto rpy = q.toEulerAngles();
+    {
+        auto q = Quaternion!double(0.1, 0.2, 0.3);
+        auto rpy = q.toEulerAngles();
 
-    assert(approxEqual(rpy.roll, 0.1));
-    assert(approxEqual(rpy.pitch, 0.2));
-    assert(approxEqual(rpy.yaw, 0.3));
+        assert(approxEqual(rpy.roll, 0.1));
+        assert(approxEqual(rpy.pitch, 0.2));
+        assert(approxEqual(rpy.yaw, 0.3));
+    }
+
+    {
+        import core.simd;
+
+        float4 f = [0.1, 0.2, 0.3, 0.4];
+        auto q = Quaternion!float(f);
+        assert(approxEqual(q.x, f[0]));
+    }
 }
